@@ -17,10 +17,6 @@ public class AppLauncher {
     }
 
     private static void startServer(final String fileName) {
-        // Here could pick the server type as an argument, property, etc.
-        final ServerType serverType = AppConfig.DEFAULT_SERVER_TYPE;
-
-        final ServerLauncher server = new ServerLauncher();
-        server.launchServer(serverType, fileName);
+        new ServerLauncher().launchServer(fileName);
     }
 }
