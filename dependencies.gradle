@@ -1,0 +1,10 @@
+// Dependencies local to this project.
+dependencies {
+    compile libs.jsonSimple
+    compile libs.log4j2Core
+    compile libs.javalin
+    compile libs.vertx
+    compile libs.rapidoid
+
+    testCompile libs.junit
+}

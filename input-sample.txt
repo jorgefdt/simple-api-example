@@ -1,0 +1,5 @@
+{"foo": "bar"}
+{"key": "racecar"}
+{"key": "not a palindrome", "word": "sentence"}
+{"key": "abccba", "word": "swwswsw"}
+{"key": "abccb", "word": "swwswsw"}

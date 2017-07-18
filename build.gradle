@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'maven-publish'
+apply plugin: 'application'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+// -- Dependencies.
+apply from: "dependencies_versions.gradle"
+apply from: "dependencies.gradle"
+
+// -- Plugin: java
+group = 'com.viafoura'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
+
+// -- Plugin: application
+mainClassName = "com.viafoura.palindromes.AppLauncher"
+
+run {
+    args 'input-sample.txt'
+}
+
+subprojects {
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    shadowJar {
+        classifier = null
+    }
+}
+
