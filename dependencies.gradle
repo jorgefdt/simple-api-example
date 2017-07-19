@@ -7,4 +7,5 @@ dependencies {
     compile libs.rapidoid
 
     testCompile libs.junit
+    testCompile libs.vertxUnit
 }

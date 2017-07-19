@@ -1,4 +1,4 @@
-package com.viafoura.palindromes;
+package com.viafoura.examples.simpleapi;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +32,7 @@ public class PalindromesService {
     }
 
     public void collectPalindromeKeys(File file) throws IOException {
-        logger.info("Collecting palindromes from file '{}'.", file);
+        logger.info("Collecting simpleApiExample from file '{}'.", file);
         if (!file.exists()) {
             throw new IOException("Can't find file " + file);
         } else {
@@ -40,7 +40,7 @@ public class PalindromesService {
                     .map(PalindromesService::parseJsonAndGetKeyOrNull)
                     .filter(this::isPalindrome)
                     .forEach(this.palindromeKeys::add);
-            logger.info("Collected {} palindromes.", this.palindromeKeys.size());
+            logger.info("Collected {} simpleApiExample.", this.palindromeKeys.size());
         }
     }
 

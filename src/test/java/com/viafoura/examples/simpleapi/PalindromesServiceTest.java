@@ -1,4 +1,4 @@
-package com.viafoura.palindromes;
+package com.viafoura.examples.simpleapi;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

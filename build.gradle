@@ -19,7 +19,7 @@ version = '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 // -- Plugin: application
-mainClassName = "com.viafoura.palindromes.AppLauncher"
+mainClassName = "com.viafoura.simpleApiExample.AppLauncher"
 
 run {
     args 'input-sample.txt'

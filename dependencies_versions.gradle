@@ -43,6 +43,7 @@ ext {
             slf4j              : "org.slf4j:slf4j-api:$versions.slf4j",
             slf4jLog4j         : "org.slf4j:log4j-over-slf4j:$versions.slf4j",
             vertx              : "io.vertx:vertx-web:$versions.vertx",
+            vertxUnit          : "io.vertx:vertx-unit:$versions.vertx",
 
 // TEMPLATE:
 //            xxx                : "ccc",

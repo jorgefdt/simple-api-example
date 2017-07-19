@@ -1,6 +1,6 @@
-package com.viafoura.palindromes.extra;
+package com.viafoura.examples.simpleapi.extra;
 
-import com.viafoura.palindromes.PalindromesService;
+import com.viafoura.examples.simpleapi.PalindromesService;
 import io.javalin.Javalin;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
@@ -12,8 +12,7 @@ import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
 
-import static com.viafoura.palindromes.AppConfig.*;
-
+import static com.viafoura.examples.simpleapi.AppConfig.*;
 
 
 /**
