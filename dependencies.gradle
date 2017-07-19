@@ -5,6 +5,7 @@ dependencies {
     compile libs.javalin
     compile libs.vertx
     compile libs.rapidoid
+    compile libs.resilience4j
 
     testCompile libs.junit
     testCompile libs.vertxUnit

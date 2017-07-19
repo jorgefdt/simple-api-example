@@ -18,6 +18,7 @@ ext {
             rapidoid    : "5.3.5",
             slf4j       : '1.7.25',
             vertx       : "3.4.2",
+            resilience4j: "0.10.0",
     ]
     libs = [
             el                 : "javax.el:javax.el-api:$versions.el",
@@ -44,6 +45,7 @@ ext {
             slf4jLog4j         : "org.slf4j:log4j-over-slf4j:$versions.slf4j",
             vertx              : "io.vertx:vertx-web:$versions.vertx",
             vertxUnit          : "io.vertx:vertx-unit:$versions.vertx",
+            resilience4j       : "io.github.resilience4j:resilience4j-ratelimiter:$versions.resilience4j",
 
 // TEMPLATE:
 //            xxx                : "ccc",
