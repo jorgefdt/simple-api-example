@@ -33,13 +33,18 @@ public class APIServer {
 
         final Vertx vertx = Vertx.vertx();
         final Router router = Router.router(vertx);
-
         registerRoutes(router);
-
         vertx.createHttpServer()
                 .requestHandler(router::accept)
-                .listen(AppConfig.SERVER_PORT);
+                .listen(AppConfig.SERVER_PORT, listenResult -> {
+                    if (listenResult.failed()) {
+                        logger.error("Could not start HTTP server: {}", listenResult.cause().getMessage());
+                    } else {
+                        logger.info("Server started.");
+                    }
+                });
     }
+
 
     /**
      * Configure each route here.
@@ -56,6 +61,7 @@ public class APIServer {
         router.route("/").handler(new SomeComplexHandler());
     }
 }
+
 
 class SomeComplexHandler implements Handler<RoutingContext> {
     @Override
