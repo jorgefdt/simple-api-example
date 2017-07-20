@@ -33,6 +33,16 @@ public class APIServer {
     }
 
 
+    private static RateLimiterConfig makeDemoRateLimiter() {
+        // Calling rate not higher than 10 req/ms.
+        return RateLimiterConfig.custom()
+                .limitRefreshPeriod(Duration.ofMillis(100))
+                .limitForPeriod(5)
+                .timeoutDuration(Duration.ofMillis(10))
+                .build();
+    }
+
+
     /**
      * Launches the server.
      */
@@ -41,7 +51,6 @@ public class APIServer {
 
         final Vertx vertx = Vertx.vertx();
         final Router router = Router.router(vertx);
-//        registerRoutes(router);
         registerRoutesWithLimit(router);
         vertx.createHttpServer()
                 .requestHandler(router::accept)
@@ -52,32 +61,6 @@ public class APIServer {
                         logger.info("Server started.");
                     }
                 });
-    }
-
-
-    /**
-     * Configure each route here.
-     */
-    private void registerRoutes(Router router) {
-        router.route(AppConfig.GET_WORDS_HANDLER_PATH).handler(ctx -> {
-            ctx.response().end(service.getPalindromeKeys().toString());
-        });
-
-        router.route(AppConfig.COUNT_WORDS_HANDLER_PATH).handler(ctx -> {
-            ctx.response().end(Integer.toString(service.getPalindromeKeys().size()));
-        });
-
-        router.route("/").handler(new SomeComplexHandler());
-    }
-
-
-    private static RateLimiterConfig makeDemoRateLimiter() {
-        // Calling rate not higher than 10 req/ms.
-        return RateLimiterConfig.custom()
-                .limitRefreshPeriod(Duration.ofMillis(100))
-                .limitForPeriod(5)
-                .timeoutDuration(Duration.ofMillis(10))
-                .build();
     }
 
 
