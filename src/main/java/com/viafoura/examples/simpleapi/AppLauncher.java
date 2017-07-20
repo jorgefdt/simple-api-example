@@ -23,9 +23,11 @@ public class AppLauncher {
     }
 
     static void startServer(final String fileName) {
+        // Force Vertx.io and Netty logging to use the same as the rest of this app: Log4J2
         VertxUtils.customizeVertxLogging();
+
         try {
-            new APIServer(fileName).start();
+            new PalindromesAPIServer(fileName).start();
         } catch (IOException e) {
             logger.error("Problem while executing server.", e);
         }

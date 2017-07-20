@@ -17,8 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.IntStream;
 
 @RunWith(VertxUnitRunner.class)
-public class APIServerTest {
-    private static final Logger logger = LogManager.getLogger(APIServerTest.class);
+public class BaseAPIServerTest {
+    private static final Logger logger = LogManager.getLogger(BaseAPIServerTest.class);
     private static final String INPUT_TEST_FILE = "input-sample.txt";
 
     @Rule
@@ -40,7 +40,7 @@ public class APIServerTest {
         final Async async = ctx.async();
         ctxRule.vertx()
                 .createHttpClient()
-                .getNow(7000, "localhost", AppConfig.GET_WORDS_HANDLER_PATH, res -> {
+                .getNow(AppConfig.SERVER_PORT, "localhost", AppConfig.GET_WORDS_HANDLER_PATH, res -> {
                     res.handler(body -> {
                         ctx.assertEquals("[racecar, abccba]", body.toString());
                         async.complete();
@@ -54,7 +54,7 @@ public class APIServerTest {
         final Async async = ctx.async();
         ctxRule.vertx()
                 .createHttpClient()
-                .getNow(7000, "localhost", AppConfig.COUNT_WORDS_HANDLER_PATH, res -> {
+                .getNow(AppConfig.SERVER_PORT, "localhost", AppConfig.COUNT_WORDS_HANDLER_PATH, res -> {
                     res.handler(body -> {
                         ctx.assertEquals("2", body.toString());
                         async.complete();
@@ -72,7 +72,7 @@ public class APIServerTest {
         final Async async = ctx.async(NUM_REQUESTS);
         IntStream.range(0, NUM_REQUESTS).forEach(x -> {
             vertx.createHttpClient()
-                    .get(7000, "localhost", AppConfig.COUNT_WORDS_HANDLER_PATH)
+                    .get(AppConfig.SERVER_PORT, "localhost", AppConfig.COUNT_WORDS_HANDLER_PATH)
                     .handler(res -> {
                         final int status = res.statusCode();
                         if (status == 200) {
