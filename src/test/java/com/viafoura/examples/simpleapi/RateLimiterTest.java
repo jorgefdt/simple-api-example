@@ -21,8 +21,6 @@ public class RateLimiterTest {
 
     @Test
     public void tryRateLimiter() {
-        logger.info("Trying RL");
-
         // Calling rate not higher than 10 req/ms.
         final RateLimiterConfig config = RateLimiterConfig.custom()
                 .limitRefreshPeriod(Duration.ofMillis(100))

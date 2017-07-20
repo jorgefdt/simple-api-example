@@ -1,6 +1,6 @@
 package com.viafoura.examples.simpleapi;
 
-import com.viafoura.common.vertx.BaseAPIServer;
+import com.viafoura.common.vertx.BaseApiServer;
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import io.vertx.core.Handler;
 import io.vertx.ext.web.Router;
@@ -17,13 +17,13 @@ import static com.viafoura.examples.simpleapi.AppConfig.GET_WORDS_HANDLER_PATH;
 /**
  * HTTP Server that serves a REST API on PalindromesService.
  */
-public class PalindromesAPIServer extends BaseAPIServer {
+public class PalindromesApiServer extends BaseApiServer {
     /**
      * The service.
      */
     private final PalindromesService service = new PalindromesService();
 
-    public PalindromesAPIServer(final String fileName) throws IOException {
+    public PalindromesApiServer(final String fileName) throws IOException {
         super(AppConfig.SERVER_PORT, makeRateLimiterConfig());
         this.service.collectPalindromeKeys(fileName);
     }
