@@ -16,9 +16,9 @@ ext {
             mchange     : "0.9.5.2",
             metrics     : '3.1.2',
             rapidoid    : "5.3.5",
+            resilience4j: "0.10.0",
             slf4j       : '1.7.25',
             vertx       : "3.4.2",
-            resilience4j: "0.10.0",
     ]
     libs = [
             el                 : "javax.el:javax.el-api:$versions.el",
@@ -41,11 +41,12 @@ ext {
             metricsJvm         : "io.dropwizard.metrics:metrics-jvm:$versions.metrics",
             metricsLogback     : "io.dropwizard.metrics:metrics-logback:$versions.metrics",
             rapidoid           : "org.rapidoid:rapidoid-quick:$versions.rapidoid",
+            resilience4j       : "io.github.resilience4j:resilience4j-ratelimiter:$versions.resilience4j",
             slf4j              : "org.slf4j:slf4j-api:$versions.slf4j",
             slf4jLog4j         : "org.slf4j:log4j-over-slf4j:$versions.slf4j",
             vertx              : "io.vertx:vertx-web:$versions.vertx",
+            vertxDWMetrics     : "io.vertx:vertx-dropwizard-metrics:$versions.vertx",
             vertxUnit          : "io.vertx:vertx-unit:$versions.vertx",
-            resilience4j       : "io.github.resilience4j:resilience4j-ratelimiter:$versions.resilience4j",
 
 // TEMPLATE:
 //            xxx                : "ccc",
