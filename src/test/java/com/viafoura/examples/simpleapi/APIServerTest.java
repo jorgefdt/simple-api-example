@@ -1,8 +1,8 @@
 package com.viafoura.examples.simpleapi;
 
+import io.vertx.core.Vertx;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.Repeat;
 import io.vertx.ext.unit.junit.RepeatRule;
 import io.vertx.ext.unit.junit.RunTestOnContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -12,6 +12,9 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.IntStream;
 
 @RunWith(VertxUnitRunner.class)
 public class APIServerTest {
@@ -32,7 +35,6 @@ public class APIServerTest {
     }
 
 
-    @Repeat(1000)
     @Test
     public void getPalindromes(TestContext ctx) {
         final Async async = ctx.async();
@@ -47,7 +49,6 @@ public class APIServerTest {
     }
 
 
-    @Repeat(100)
     @Test
     public void getPalindromesCount(TestContext ctx) {
         final Async async = ctx.async();
@@ -59,5 +60,41 @@ public class APIServerTest {
                         async.complete();
                     });
                 });
+    }
+
+
+    @Test
+    public void getPalindromesCountLimited(TestContext ctx) {
+        final int NUM_REQUESTS = 00;
+        final AtomicLong counter = new AtomicLong();
+
+        final Vertx vertx = Vertx.vertx();
+        final Async async = ctx.async(NUM_REQUESTS);
+        IntStream.range(0, NUM_REQUESTS).forEach(x -> {
+            vertx.createHttpClient()
+                    .get(7000, "localhost", AppConfig.COUNT_WORDS_HANDLER_PATH)
+                    .handler(res -> {
+                        final int status = res.statusCode();
+
+                        if (status == 200) {
+                            logger.info("OK");
+                            counter.incrementAndGet();
+                        } else {
+                            logger.info("FAILED: {}", status);
+                        }
+
+                        final int count = async.count();
+                        if (count == 0) {
+                            async.complete();
+                        } else {
+                            async.countDown();
+                        }
+                    })
+                    .end();
+        });
+
+        logger.info("Awaiting...");
+        async.awaitSuccess();
+        logger.info("END - Accepted {} requests.", counter.get());
     }
 }

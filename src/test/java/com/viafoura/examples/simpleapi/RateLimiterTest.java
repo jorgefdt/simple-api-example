@@ -49,4 +49,27 @@ public class RateLimiterTest {
         logger.info("calls: {}", calls);
         Assert.assertTrue(counter.get() < NUM_REQUESTS);
     }
+
+    @Test
+    public void tryRateLimiterHandler() {
+        // Calling rate not higher than 10 req/ms.
+        final RateLimiterConfig config = RateLimiterConfig.custom()
+                .limitRefreshPeriod(Duration.ofMillis(100))
+                .limitForPeriod(5)
+                .timeoutDuration(Duration.ofMillis(10))
+                .build();
+
+        final RateLimiter rateLimiter = RateLimiter.of("VF1", config);
+
+        final AtomicLong counter = new AtomicLong();
+        final LimitRate handler = LimitRate.of(event -> counter.incrementAndGet(), rateLimiter);
+
+        // Run
+        final int NUM_REQUESTS = 200;
+        IntStream.range(0, NUM_REQUESTS).forEach(x -> handler.handle(null));
+
+        // Verification.
+        logger.info("Called {} times.", counter.get());
+        Assert.assertTrue(counter.get() < NUM_REQUESTS);
+    }
 }

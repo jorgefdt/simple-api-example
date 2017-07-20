@@ -1,5 +1,7 @@
 package com.viafoura.examples.simpleapi;
 
+import io.github.resilience4j.ratelimiter.RateLimiter;
+import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
@@ -8,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
 
 /**
@@ -19,10 +22,13 @@ public class APIServer {
     /**
      * The service.
      */
-    final PalindromesService service = new PalindromesService();
+    private final PalindromesService service = new PalindromesService();
+    private RateLimiter rateLimiter;
+
 
     public APIServer(final String fileName) throws IOException {
         this.service.collectPalindromeKeys(fileName);
+        initRateLimiter();
     }
 
     /**
@@ -33,7 +39,8 @@ public class APIServer {
 
         final Vertx vertx = Vertx.vertx();
         final Router router = Router.router(vertx);
-        registerRoutes(router);
+//        registerRoutes(router);
+        registerRoutesWithLimit(router);
         vertx.createHttpServer()
                 .requestHandler(router::accept)
                 .listen(AppConfig.SERVER_PORT, listenResult -> {
@@ -60,6 +67,35 @@ public class APIServer {
 
         router.route("/").handler(new SomeComplexHandler());
     }
+
+
+    private void initRateLimiter() {
+        // Calling rate not higher than 10 req/ms.
+        final RateLimiterConfig config = RateLimiterConfig.custom()
+                .limitRefreshPeriod(Duration.ofMillis(100))
+                .limitForPeriod(5)
+                .timeoutDuration(Duration.ofMillis(10))
+                .build();
+
+        this.rateLimiter = RateLimiter.of("VF1", config);
+    }
+
+
+    /**
+     * Configure each route here.
+     */
+    private void registerRoutesWithLimit(Router router) {
+        final Handler<RoutingContext> handler = ctx -> {
+            ctx.response().end(service.getPalindromeKeys().toString());
+        };
+        router.route(AppConfig.GET_WORDS_HANDLER_PATH).handler(LimitRate.of(handler, this.rateLimiter));
+
+        router.route(AppConfig.COUNT_WORDS_HANDLER_PATH).handler(LimitRate.of(ctx -> {
+            ctx.response().end(Integer.toString(service.getPalindromeKeys().size()));
+        }, this.rateLimiter));
+
+        router.route("/").handler(LimitRate.of(new SomeComplexHandler(), this.rateLimiter));
+    }
 }
 
 
@@ -71,3 +107,5 @@ class SomeComplexHandler implements Handler<RoutingContext> {
         ctx.response().end("" + seconds);
     }
 }
+
+
