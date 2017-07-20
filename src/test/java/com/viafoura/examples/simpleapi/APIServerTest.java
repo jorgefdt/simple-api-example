@@ -65,7 +65,7 @@ public class APIServerTest {
 
     @Test
     public void getPalindromesCountLimited(TestContext ctx) {
-        final int NUM_REQUESTS = 00;
+        final int NUM_REQUESTS = 200;
         final AtomicLong counter = new AtomicLong();
 
         final Vertx vertx = Vertx.vertx();
@@ -75,10 +75,9 @@ public class APIServerTest {
                     .get(7000, "localhost", AppConfig.COUNT_WORDS_HANDLER_PATH)
                     .handler(res -> {
                         final int status = res.statusCode();
-
                         if (status == 200) {
-                            logger.info("OK");
                             counter.incrementAndGet();
+                            logger.info("OK");
                         } else {
                             logger.info("FAILED: {}", status);
                         }

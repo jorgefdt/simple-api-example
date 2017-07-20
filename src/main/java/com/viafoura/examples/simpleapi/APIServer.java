@@ -1,5 +1,6 @@
 package com.viafoura.examples.simpleapi;
 
+import com.viafoura.common.vertx.RateLimitDecorator;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import io.vertx.core.Handler;
@@ -23,13 +24,14 @@ public class APIServer {
      * The service.
      */
     private final PalindromesService service = new PalindromesService();
-    private RateLimiter rateLimiter;
+    private final RateLimitDecorator limiter;
 
 
     public APIServer(final String fileName) throws IOException {
         this.service.collectPalindromeKeys(fileName);
-        initRateLimiter();
+        this.limiter = new RateLimitDecorator(RateLimiter.of("VF1", makeDemoRateLimiter()));
     }
+
 
     /**
      * Launches the server.
@@ -69,15 +71,13 @@ public class APIServer {
     }
 
 
-    private void initRateLimiter() {
+    private static RateLimiterConfig makeDemoRateLimiter() {
         // Calling rate not higher than 10 req/ms.
-        final RateLimiterConfig config = RateLimiterConfig.custom()
+        return RateLimiterConfig.custom()
                 .limitRefreshPeriod(Duration.ofMillis(100))
                 .limitForPeriod(5)
                 .timeoutDuration(Duration.ofMillis(10))
                 .build();
-
-        this.rateLimiter = RateLimiter.of("VF1", config);
     }
 
 
@@ -88,13 +88,13 @@ public class APIServer {
         final Handler<RoutingContext> handler = ctx -> {
             ctx.response().end(service.getPalindromeKeys().toString());
         };
-        router.route(AppConfig.GET_WORDS_HANDLER_PATH).handler(LimitRate.of(handler, this.rateLimiter));
+        router.route(AppConfig.GET_WORDS_HANDLER_PATH).handler(limiter.of(handler));
 
-        router.route(AppConfig.COUNT_WORDS_HANDLER_PATH).handler(LimitRate.of(ctx -> {
+        router.route(AppConfig.COUNT_WORDS_HANDLER_PATH).handler(limiter.of(ctx -> {
             ctx.response().end(Integer.toString(service.getPalindromeKeys().size()));
-        }, this.rateLimiter));
+        }));
 
-        router.route("/").handler(LimitRate.of(new SomeComplexHandler(), this.rateLimiter));
+        router.route("/").handler(limiter.of(new SomeComplexHandler()));
     }
 }
 

@@ -1,9 +1,12 @@
 package com.viafoura.examples.simpleapi;
 
+import com.viafoura.common.vertx.RateLimitDecorator;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import io.github.resilience4j.ratelimiter.RateLimiterConfig;
 import io.vavr.CheckedRunnable;
 import io.vavr.control.Try;
+import io.vertx.core.Handler;
+import io.vertx.ext.web.RoutingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
@@ -60,13 +63,14 @@ public class RateLimiterTest {
                 .build();
 
         final RateLimiter rateLimiter = RateLimiter.of("VF1", config);
+        final RateLimitDecorator limiter = new RateLimitDecorator(rateLimiter);
 
         final AtomicLong counter = new AtomicLong();
-        final LimitRate handler = LimitRate.of(event -> counter.incrementAndGet(), rateLimiter);
+        final Handler<RoutingContext> limitedHandler = limiter.of(event -> counter.incrementAndGet());
 
         // Run
         final int NUM_REQUESTS = 200;
-        IntStream.range(0, NUM_REQUESTS).forEach(x -> handler.handle(null));
+        IntStream.range(0, NUM_REQUESTS).forEach(x -> limitedHandler.handle(null));
 
         // Verification.
         logger.info("Called {} times.", counter.get());

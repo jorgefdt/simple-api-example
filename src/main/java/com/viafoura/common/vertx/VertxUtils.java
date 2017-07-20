@@ -1,4 +1,4 @@
-package com.viafoura.examples.simpleapi;
+package com.viafoura.common.vertx;
 
 import io.netty.util.internal.logging.InternalLoggerFactory;
 import io.netty.util.internal.logging.Log4J2LoggerFactory;
