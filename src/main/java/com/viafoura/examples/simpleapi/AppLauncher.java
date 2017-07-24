@@ -27,7 +27,7 @@ public class AppLauncher {
         VertxUtils.customizeVertxLogging();
 
         try {
-            new PalindromesApiServer(fileName).start();
+            new ExampleApiServer(fileName).start();
         } catch (IOException e) {
             logger.error("Problem while executing server.", e);
         }

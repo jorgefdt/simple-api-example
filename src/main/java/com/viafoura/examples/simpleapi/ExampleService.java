@@ -15,12 +15,17 @@ import java.util.List;
 /**
  * Provides services related to palindrome strings.
  */
-public class PalindromesService {
-    private static final Logger logger = LogManager.getLogger(PalindromesService.class);
+public class ExampleService {
+    private static final Logger logger = LogManager.getLogger(ExampleService.class);
     private final List<String> palindromeKeys = new ArrayList<>();
 
     public List<String> getPalindromeKeys() {
         return palindromeKeys;
+    }
+
+    public Integer getPalindromeKeysSize() {
+//        AppConfig.vfmClient.meter("dataBurritoGetPalindromeKeysSize").mark();
+        return getPalindromeKeys().size();
     }
 
     public void collectPalindromeKeys(String fileName) throws IOException {
@@ -37,7 +42,7 @@ public class PalindromesService {
             throw new IOException("Can't find file " + file);
         } else {
             Files.lines(file.toPath())
-                    .map(PalindromesService::parseJsonAndGetKeyOrNull)
+                    .map(ExampleService::parseJsonAndGetKeyOrNull)
                     .filter(this::isPalindrome)
                     .forEach(this.palindromeKeys::add);
             logger.info("Collected {} simpleApiExample.", this.palindromeKeys.size());

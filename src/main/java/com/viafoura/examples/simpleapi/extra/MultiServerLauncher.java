@@ -1,6 +1,6 @@
 package com.viafoura.examples.simpleapi.extra;
 
-import com.viafoura.examples.simpleapi.PalindromesService;
+import com.viafoura.examples.simpleapi.ExampleService;
 import io.javalin.Javalin;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
@@ -35,7 +35,7 @@ public class MultiServerLauncher {
     /**
      * The service.
      */
-    private final PalindromesService service = new PalindromesService();
+    private final ExampleService service = new ExampleService();
 
     public MultiServerLauncher() {
         registerLaunchers();
@@ -68,7 +68,7 @@ public class MultiServerLauncher {
 
     private void startJavalinServer() {
         Javalin.create()
-                .port(SERVER_PORT)
+                .port(APP_SERVER_PORT)
                 .get(GET_WORDS_HANDLER_PATH, ctx -> {
                     ctx.result(service.getPalindromeKeys().toString());
                 })
@@ -90,12 +90,12 @@ public class MultiServerLauncher {
         });
         vertx.createHttpServer()
                 .requestHandler(router::accept)
-                .listen(SERVER_PORT);
+                .listen(APP_SERVER_PORT);
     }
 
 
     private void startRapidoidServer() {
-        On.port(SERVER_PORT);
+        On.port(APP_SERVER_PORT);
         On.get(GET_WORDS_HANDLER_PATH).json(msg -> service.getPalindromeKeys());
         On.get(COUNT_WORDS_HANDLER_PATH).json(msg -> service.getPalindromeKeys().size());
     }

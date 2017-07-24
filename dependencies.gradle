@@ -1,10 +1,12 @@
 // Dependencies local to this project.
 dependencies {
+    compile libs.commonMonitoring
     compile libs.javalin
     compile libs.jsonSimple
     compile libs.log4j2Core
     compile libs.rapidoid
     compile libs.resilience4j
+    compile libs.typesafeConfig
     compile libs.vertx
     compile libs.vertxDWMetrics
 

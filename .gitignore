@@ -38,5 +38,11 @@ proguard/
 ### files for the dex VM
 *.dex
 
+### Log Files
+*.log
+
 ### OSX
 .DS_Store
+
+### Keystore files
+*.jks

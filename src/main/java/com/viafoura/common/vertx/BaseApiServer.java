@@ -57,6 +57,8 @@ public abstract class BaseApiServer {
      */
     public void start() {
         logger.info("Launching {} server.", getClass().getSimpleName());
+//        Heartbeat.emitForeverTo(AppConfig.vfmClient, AppConfig.HEARTBEAT_INTERVAL);
+
         final Vertx vertx = Vertx.vertx(createMetricsOptions());
         final Router router = Router.router(vertx);
         registerRoutes(router);
