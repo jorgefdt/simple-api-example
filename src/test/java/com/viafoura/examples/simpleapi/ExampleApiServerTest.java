@@ -19,8 +19,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 @RunWith(VertxUnitRunner.class)
-public class PalindromesApiServerTest {
-    private static final Logger logger = LogManager.getLogger(PalindromesApiServerTest.class);
+public class ExampleApiServerTest {
+    private static final Logger logger = LogManager.getLogger(ExampleApiServerTest.class);
     private static final String INPUT_TEST_FILE = "input-sample.txt";
 
     @Rule
@@ -70,7 +70,7 @@ public class PalindromesApiServerTest {
 
             final int thisIndex = this.attemptedRequestsCounter.getAndIncrement();
             vertx.createHttpClient()
-                    .get(AppConfig.SERVER_PORT, "localhost", path)
+                    .get(AppConfig.APP_SERVER_PORT, "localhost", path)
                     .handler(res -> {
                         final int status = res.statusCode();
                         if (status == HttpResponseStatus.OK.code()) {
@@ -126,7 +126,7 @@ public class PalindromesApiServerTest {
 
         final int thisIndex = attemptedRequestsCounter.getAndIncrement();
         vertx.createHttpClient()
-                .getNow(AppConfig.SERVER_PORT, "localhost", path, res -> {
+                .getNow(AppConfig.APP_SERVER_PORT, "localhost", path, res -> {
                     final int status = res.statusCode();
                     if (status == HttpResponseStatus.OK.code()) {
                         res.bodyHandler(body -> {

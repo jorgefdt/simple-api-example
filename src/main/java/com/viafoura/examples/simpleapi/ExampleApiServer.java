@@ -15,25 +15,25 @@ import static com.viafoura.examples.simpleapi.AppConfig.COUNT_WORDS_HANDLER_PATH
 import static com.viafoura.examples.simpleapi.AppConfig.GET_WORDS_HANDLER_PATH;
 
 /**
- * HTTP Server that serves a REST API on PalindromesService.
+ * HTTP Server that serves a REST API on ExampleService.
  */
-public class PalindromesApiServer extends BaseApiServer {
+public class ExampleApiServer extends BaseApiServer {
     /**
      * The service.
      */
-    private final PalindromesService service = new PalindromesService();
+    private final ExampleService service = new ExampleService();
 
-    public PalindromesApiServer(final String fileName) throws IOException {
-        super(AppConfig.SERVER_PORT, makeRateLimiterConfig());
+    public ExampleApiServer(final String fileName) throws IOException {
+        super(AppConfig.APP_SERVER_PORT, makeRateLimiterConfig());
         this.service.collectPalindromeKeys(fileName);
     }
 
     private static RateLimiterConfig makeRateLimiterConfig() {
         // Calling rate not higher than 10 req/ms.
         return RateLimiterConfig.custom()
-                .limitRefreshPeriod(Duration.ofMillis(100))
-                .limitForPeriod(5)
-                .timeoutDuration(Duration.ofMillis(10))
+                .limitRefreshPeriod(Duration.ofMillis(AppConfig.LIMIT_REFRESH_PERIOD))
+                .limitForPeriod(AppConfig.LIMIT_FOR_PERIOD)
+                .timeoutDuration(Duration.ofMillis(AppConfig.TIMEOUT_DURATION))
                 .build();
     }
 
@@ -48,7 +48,7 @@ public class PalindromesApiServer extends BaseApiServer {
         ));
 
         router.route(COUNT_WORDS_HANDLER_PATH).handler(limit(ctx ->
-                ctx.response().end(Integer.toString(service.getPalindromeKeys().size()))
+                ctx.response().end(Integer.toString(service.getPalindromeKeysSize()))
         ));
 
         router.route("/").handler(limit(new SomeComplexHandler()));

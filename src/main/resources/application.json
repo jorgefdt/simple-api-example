@@ -1,0 +1,25 @@
+{
+  "simpleapi": {
+    "app": {
+      "server": {
+        "port": 7000
+      }
+    },
+    "ratelimit": {
+      "limitRefreshPeriod": 100,
+      "limitForPeriod": 5,
+      "timeoutDuration": 10
+    },
+    "es": {
+      "cluster.name": "uup",
+      "bootstrap": {
+        "server": "genio",
+        "port": 9300
+      },
+      "index": "profiles_nested"
+    },
+    "metrics": {
+      "heartbeatInterval": 1000
+    }
+  }
+}

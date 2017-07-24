@@ -10,12 +10,12 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PalindromesServiceTest {
-    private static final Logger logger = LogManager.getLogger(PalindromesServiceTest.class);
+public class ExampleServiceTest {
+    private static final Logger logger = LogManager.getLogger(ExampleServiceTest.class);
 
     @Test
     public void collectPalindromeKeys() throws Exception {
-        final PalindromesService service = new PalindromesService();
+        final ExampleService service = new ExampleService();
 
         // Prepare.
         final List<String> lines = new ArrayList<>();
@@ -43,7 +43,7 @@ public class PalindromesServiceTest {
 
     @Test
     public void isPalindrome() {
-        final PalindromesService service = new PalindromesService();
+        final ExampleService service = new ExampleService();
         Assert.assertFalse(service.isPalindrome("bar"));
         Assert.assertFalse(service.isPalindrome("not a palindrome"));
         Assert.assertTrue(service.isPalindrome("racecar"));
